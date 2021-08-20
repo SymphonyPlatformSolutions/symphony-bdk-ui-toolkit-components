@@ -10,7 +10,8 @@ import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 
 const emotionCache = createCache({
-    container: popoutDocument.head
+    container: popoutDocument.head,
+    key: 'unique-key-if-using-multiple-caches'
 });
 
 return (
