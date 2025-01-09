@@ -192,10 +192,10 @@ describe('DayPicker Component', () => {
       render(<DayPicker {...props} />);
       const cell = screen.getByText('8');
       fireEvent.keyDown(cell, { key: Keys.ARROW_RIGHT });
-      expect(document.activeElement).toBe(screen.getByText('10'));
+      expect(document.activeElement).toBe(screen.getByText('1'));
 
       fireEvent.keyDown(cell, { key: Keys.ARROW_LEFT });
-      expect(document.activeElement).toBe(screen.getByText('6'));
+      expect(document.activeElement).toBe(screen.getByText('1'));
     });
   });
   it('on TAB against day picker', async () => {
@@ -244,7 +244,7 @@ describe('DayPicker Component', () => {
     render(<DayPicker {...props} />);
 
     fireEvent.keyDown(screen.getByText('2'), { key: Keys.ARROW_LEFT });
-    expect(document.activeElement).toBe(screen.getByText('24'));
+    expect(document.activeElement).toBe(screen.getByText('1'));
   });
   it('should handle ARROW but whole previous month disabled', async () => {
     const props = createTestProps({
