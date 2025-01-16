@@ -53,6 +53,7 @@ type DayPickerComponentProps = {
   month?: Date;
   selectedDays?: Date;
   todayButton?: string;
+  datePickerID?: string;
   onClose?: () => any;
   onDayClick?: (date: Date, modifiers) => any;
 };
@@ -384,44 +385,51 @@ class DayPicker extends React.Component<
             ? isSelected
               ? 0
               : -1
-            : cell === 0
+            : isToday
               ? 0
               : -1; // focus on selected day otherwise first cell
 
           return (
             <div
               key={cellName}
-              aria-label={cellName}
-              aria-selected={ariaSelected}
-              tabIndex={isTabIndex}
               role="gridcell"
               className={clsx(
-                'tk-daypicker-day',
+                'tk-daypicker-day-container',
                 {
-                  'tk-daypicker-day--selected': isSelected,
+                  'tk-daypicker-day-container--today': isToday,
                 },
-                {
-                  'tk-daypicker-day--today': isToday,
-                },
-                {
-                  'tk-daypicker-day--highlighted': isHighlighted && !isDisabled,
-                },
-                { 'tk-daypicker-day--disabled': isDisabled }
               )}
-              onKeyDown={(e) =>
-                this.handleKeyDownCell(e, cellDate, {
-                  disabled: isDisabled,
-                  selected: isSelected,
-                })
-              }
-              onClick={() =>
-                onDayClick(cellDate, {
-                  disabled: isDisabled,
-                  selected: isSelected,
-                })
-              }
             >
-              {cellNumber}
+              <button
+                className={clsx(
+                  'tk-daypicker-day',
+                  {
+                    'tk-daypicker-day--selected': isSelected,
+                  },
+                  {
+                    'tk-daypicker-day--highlighted':
+                      isHighlighted && !isDisabled,
+                  },
+                  { 'tk-daypicker-day--disabled': isDisabled }
+                )}
+                aria-label={cellName}
+                aria-selected={ariaSelected}
+                tabIndex={isTabIndex}
+                onKeyDown={(e) =>
+                  this.handleKeyDownCell(e, cellDate, {
+                    disabled: isDisabled,
+                    selected: isSelected,
+                  })
+                }
+                onClick={() =>
+                  onDayClick(cellDate, {
+                    disabled: isDisabled,
+                    selected: isSelected,
+                  })
+                }
+              >
+                {cellNumber}
+              </button>
             </div>
           );
         })}
@@ -439,6 +447,7 @@ class DayPicker extends React.Component<
           className="tk-daypicker-today"
           tabIndex={0}
           aria-label={todayButton}
+          role="button"
           onClick={() => onDayClick(today, {})}
           onKeyDown={this.handleKeyDownFooter}
         >
@@ -449,7 +458,7 @@ class DayPicker extends React.Component<
   }
 
   render() {
-    const { dir, labels, locale } = this.props;
+    const { dir, labels, locale, datePickerID } = this.props;
     const { currentMonth, showTooltip, currentID } = this.state;
 
     const now = new Date();
@@ -458,6 +467,7 @@ class DayPicker extends React.Component<
         className="tk-daypicker"
         ref={(el) => (this.dayPicker = el)}
         onKeyDown={this.handleKeyDownContainer}
+        id={datePickerID}
       >
         <Header
           date={currentMonth}
